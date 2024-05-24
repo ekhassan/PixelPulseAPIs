@@ -10,6 +10,7 @@ from pymongo import MongoClient
 from datetime import datetime, date
 from dotenv import load_dotenv, find_dotenv
 import os,time,re
+import uvicorn
 
 load_dotenv(find_dotenv())
 password = os.environ.get("MONGODB_PWD")
@@ -59,6 +60,10 @@ def validate_password(password):
         return "Password must contain at least one special character (!@#$%^&*(),.?\":{}|<>)."
 
     return "Password is valid."
+
+@app.get('/')
+async def home():
+    return {"message": "Welcome to FastAPI"}
 
 @app.get('/login')
 async def login(email: str, password: str):
@@ -129,6 +134,7 @@ async def extension_test(name:str = Form(...),text:str = Form(...)):
 
 
 
-# if __name__ == "__main__":
-#     import uvicorn
-#     uvicorn.run(app, host="0.0.0.0", port=8000)
+if __name__ == "__main__":
+  
+    uvicorn.run('main:app', host="0.0.0.0", port=8000,reload=True)
+
